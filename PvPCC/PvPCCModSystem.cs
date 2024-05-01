@@ -9,14 +9,16 @@ namespace PvPCC
     {
         public override void StartServerSide(ICoreServerAPI api)
         {
+            api.Event.PlayerDisconnect += (serverPlayer) =>
+            {
+                serverPlayer.Entity?.WatchedAttributes.RemoveAttribute("slowonhitcallback");
+
+            };
+            
             api.Event.PlayerNowPlaying += (serverPlayer) =>
             {
-                if (serverPlayer.Entity is not null)
-                {
-                    var entity = serverPlayer.Entity;
-                    entity.AddBehavior(new SlowOnHitBehavior(entity));
-                    
-                }
+                var entity = serverPlayer.Entity;
+                entity?.AddBehavior(new SlowOnHitBehavior(entity));
             };
         }
     }

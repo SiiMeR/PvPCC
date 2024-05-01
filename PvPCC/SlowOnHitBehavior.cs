@@ -7,6 +7,7 @@ public class SlowOnHitBehavior : EntityBehavior
 {
     private const int SlowDurationMilliseconds = 1000;
     private const float PercentSpeedLossOnHit = 40.0f; // flat
+
     public SlowOnHitBehavior(Entity entity) : base(entity)
     {
     }
@@ -15,11 +16,18 @@ public class SlowOnHitBehavior : EntityBehavior
     {
         if (entity is EntityPlayer playerEntity && damageSource.Source == EnumDamageSource.Player)
         {
-            playerEntity.Stats.Set("walkspeed", "slowonhit", -(PercentSpeedLossOnHit/100.0f));
-            entity.World.RegisterCallback((_) =>
+            var existingCallback = playerEntity.WatchedAttributes.GetLong("slowonhitcallback", -1L);
+            if (existingCallback != -1L)
             {
-                playerEntity.Stats.Remove("walkspeed", "slowonhit");
-            }, SlowDurationMilliseconds);
+                playerEntity.World.UnregisterCallback(existingCallback);
+            }
+
+            playerEntity.Stats.Set("walkspeed", "slowonhit", -(PercentSpeedLossOnHit / 100.0f));
+            var callbackId =
+                entity.World.RegisterCallback((_) => { playerEntity.Stats.Remove("walkspeed", "slowonhit"); },
+                    SlowDurationMilliseconds);
+
+            playerEntity.WatchedAttributes.SetLong("slowonhitcallback", callbackId);
         }
 
 
