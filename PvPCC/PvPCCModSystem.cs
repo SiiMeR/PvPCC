@@ -1,7 +1,5 @@
-﻿using Vintagestory.API.Client;
+﻿using Vintagestory.API.Common;
 using Vintagestory.API.Server;
-using Vintagestory.API.Config;
-using Vintagestory.API.Common;
 
 namespace PvPCC
 {
@@ -12,13 +10,13 @@ namespace PvPCC
             api.Event.PlayerDisconnect += (serverPlayer) =>
             {
                 serverPlayer.Entity?.WatchedAttributes.RemoveAttribute("slowonhitcallback");
-
             };
             
             api.Event.PlayerNowPlaying += (serverPlayer) =>
             {
                 var entity = serverPlayer.Entity;
                 entity?.AddBehavior(new SlowOnHitBehavior(entity));
+                entity?.AddBehavior(new KnockbackOnHitBehavior(entity));
             };
         }
     }
