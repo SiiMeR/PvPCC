@@ -4,4 +4,4 @@
 **/Releases/
 # Ignore IntelliJ IDEA folder
 .idea/
-Alchemy.sln.DotSettings.User
+*.sln.DotSettings.User

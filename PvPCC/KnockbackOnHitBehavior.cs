@@ -4,6 +4,7 @@ using Vintagestory.API.Common.Entities;
 
 namespace PvPCC;
 
+// disabled for not working properly for players in air
 public class KnockbackOnHitBehavior : EntityBehavior
 {
     private static readonly EnumDamageType[] DamageTypesToAddKnockbackFor = {

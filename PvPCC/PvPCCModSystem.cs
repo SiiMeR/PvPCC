@@ -15,8 +15,10 @@ namespace PvPCC
             api.Event.PlayerNowPlaying += (serverPlayer) =>
             {
                 var entity = serverPlayer.Entity;
-                entity?.AddBehavior(new SlowOnHitBehavior(entity));
-                entity?.AddBehavior(new KnockbackOnHitBehavior(entity));
+                if (!entity.HasBehavior<SlowOnHitBehavior>())
+                {
+                    entity?.AddBehavior(new SlowOnHitBehavior(entity));
+                }
             };
         }
     }
